@@ -1,0 +1,46 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Sản phẩm của nhà cung cấp " + ViewData["SupplierName"];
+}
+
+<head>
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+
+<h1>Sản phẩm của nhà cung cấp @ViewData["SupplierName"]</h1>
+
+@if (!Model.Any())
+{
+    <p>Không có sản phẩm nào của nhà cung cấp này trong kho.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="SupplierProducts" asp-route-supplierName="@ViewData["SupplierName"]" asp-route-sortOrder="@ViewData["ProductNameSortParam"]">
+                        Tên sản phẩm
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="SupplierProducts" asp-route-supplierName="@ViewData["SupplierName"]" asp-route-sortOrder="@ViewData["QuantitySortParam"]">
+                        Số lượng còn lại
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+<a asp-action="Statistics" class="btn btn-primary">Quay lại</a>

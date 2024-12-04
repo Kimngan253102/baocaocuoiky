@@ -1,0 +1,139 @@
+﻿@model PaginatedList<InventoryManagement.Models.Product>
+
+@{
+    ViewData["Title"] = "DANH SÁCH HÀNG HÓA";
+}
+<head>
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+<h1>Danh sách hàng hóa</h1>
+
+<p>
+    <a asp-action="Create">Nhập hàng</a>
+</p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Tìm kiếm <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" placeholder="Nhập tên hàng hóa" />
+            <input type="submit" value="Tìm" class="btn btn-default" /> |
+            <a asp-action="Index">Trở về</a>
+        </p>
+        <p class="form-inline">
+            <label for="warehouseID" class="mr-2">Lọc theo kho:</label>
+            @Html.DropDownList("warehouseID", (SelectList)ViewData["WarehouseList"], "Tất cả", new { @class = "form-control mr-2" })
+            <input type="submit" value="Tìm" class="btn btn-default mr-2" />
+            <span class="align-middle">|</span>
+            <a asp-action="Index" class="ml-2">Trở về danh sách đầy đủ</a>
+        </p>
+
+    </div>
+</form>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-info" id="tempMessage">
+        @TempData["Message"]
+    </div>
+}
+<br />
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Tên sản phẩm</a>
+            </th>
+            <th>
+                Mô tả
+            </th>
+            <th>
+                Giá
+            </th>
+            <th>
+                Số lượng
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DateSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Ngày nhập kho</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["SupplierSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Nhà cung cấp</a>
+            </th>
+            <th>
+                Kho
+            </th>
+            <th>
+                Thao tác
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EntryDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Warehouse.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID">Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.ID">Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.ID">Xuất kho</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Trước
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Tiếp
+</a>
+
+<p style="margin-top: 50px">
+    <a asp-action="ExportToExcel" class="btn btn-success">Xuất ra file Excel</a>
+</p>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        // Tự động ẩn thông báo sau 5 giây
+        setTimeout(function () {
+            var tempMessage = document.getElementById('tempMessage');
+            if (tempMessage) {
+                tempMessage.style.display = 'none';
+            }
+        }, 5000);
+    </script>
+}

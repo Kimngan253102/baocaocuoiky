@@ -1,0 +1,101 @@
+﻿@model PaginatedList<InventoryManagement.Models.Account>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="success-message" class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<head>
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+
+<h1>Danh sách tài khoản</h1>
+<p>
+    <a asp-action="Create">Tạo mới</a>
+</p>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Tìm kiếm tài khoản <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" placeholder="Nhập tên tài khoản" />
+            Vai Trò: @Html.DropDownList("roleFilter", (SelectList)ViewData["RoleList"], "Tất Cả")
+            <input type="submit" value="Tìm" class="btn btn-default" /> |
+            <a asp-action="Index">Quay lại danh sách đầy đủ</a>
+        </p>
+    </div>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["UsernameSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Tên Tài Khoản</a>
+            </th>
+            <th>
+                <a>Mật Khẩu</a>
+            </th>
+            <th>
+                <a>Quản Lý</a>
+            </th>
+            <th>
+                <a>Vai Trò</a>
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Username)</td>
+                <td>@Html.DisplayFor(modelItem => item.Password)</td>
+                <td>@Html.DisplayFor(modelItem => item.Manager.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Role)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.AccountId">Sửa</a> |
+                    <a asp-action="Details" asp-route-id="@item.AccountId">Chi tiết</a> |
+                    <a asp-action="Delete" asp-route-id="@item.AccountId">Xóa</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-roleFilter="@ViewData["CurrentRoleFilter"]"
+   class="btn btn-default @prevDisabled">
+    Trước
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.PageIndex + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   asp-route-roleFilter="@ViewData["CurrentRoleFilter"]"
+   class="btn btn-default @nextDisabled">
+    Tiếp
+</a>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var successMessage = document.getElementById("success-message");
+        if (successMessage) {
+            setTimeout(function () {
+                successMessage.style.display = 'none';
+            }, 5000);
+        }
+    });
+</script>

@@ -1,0 +1,35 @@
+﻿@model InventoryManagement.Models.Warehouse
+
+@{
+    ViewData["Title"] = "Xóa kho hàng";
+}
+<head>
+    <link href="~/css/style.css" rel="stylesheet" />
+</head>
+<h1>Xóa</h1>
+
+<h3>Bạn có chắc về thao tác xóa của mình?</h3>
+<div>
+    <h4>Kho</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Location)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="WarehouseID" />
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Trờ vềt</a>
+    </form>
+</div>

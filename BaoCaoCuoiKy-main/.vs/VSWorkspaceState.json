@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\InventoryManagement",
+    "\\InventoryManagement\\InventoryManagement",
+    "\\InventoryManagement\\InventoryManagement\\Controllers",
+    "\\InventoryManagement\\InventoryManagement\\Views",
+    "\\InventoryManagement\\InventoryManagement\\Views\\Accounts",
+    "\\InventoryManagement\\InventoryManagement\\Views\\Products",
+    "\\InventoryManagement\\InventoryManagement\\Views\\Warehouses"
+  ],
+  "SelectedNode": "\\InventoryManagement\\InventoryManagement\\Views\\Accounts\\Login.cshtml",
+  "PreviewInSolutionExplorer": false
+}
